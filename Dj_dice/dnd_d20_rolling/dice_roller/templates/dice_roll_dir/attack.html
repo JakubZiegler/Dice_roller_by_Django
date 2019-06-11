@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Hello Django</title>
+
+    <meta charset="UTF-8"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+</head>
+
+<body>
+
+<div id="form_dice_roller">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+
+        <label>
+
+            Podaj ilość kości jakimi wykonasz rzut:
+
+        </label>
+
+        <input name="amount" type="text" size=2 value="1">
+
+
+        <br/><br/>
+
+
+        <label>
+
+            Podaj iluścienna kostką obrażeń wykonujesz rzut:
+
+        </label>
+
+        <select name="dice_type">
+
+            <option value="2">k2</option>
+
+            <option value="3">k3</option>
+
+            <option value="4">k4</option>
+
+            <option value="6">k6</option>
+
+            <option value="8">k8</option>
+
+            <option value="10">k10</option>
+
+            <option value="12">k12</option>
+
+            <option value="20">k20</option>
+
+            <option value="100">k100</option>
+
+        </select>
+
+
+        <br/><br/>
+
+
+        <label>
+
+            Ile wynosi modyfikator do trafienia:
+
+        </label>
+
+        <input name="pro" type="text" size=2 value="0">
+
+
+        <br/><br/>
+
+
+        <label>
+
+            ile wynosi modyfikator do orazeń:
+
+        </label>
+
+        <input name="mod" type="text" size=2 value="0">
+
+
+        <br/><br/>
+
+
+        <label>
+
+            Czy rzut jest z ułatwieniem(advatage)?
+
+        </label>
+
+        <select name="advantage">
+
+            <option value="None">Nie</option>
+
+            <option value="True">Tak</option>
+
+            <option value="False">z trudnieniem</option>
+
+        </select>
+
+
+        <br/><br/>
+
+
+        <label>
+
+            Czy obrażenia od początku sa krytyczne?:
+
+        </label>
+
+        <select name="crit">
+
+            <option value="False">Nie</option>
+
+            <option value="True">Tak</option>
+
+        </select>
+
+
+        <br/><br/>
+
+
+        <input type="submit">
+
+    </form>
+
+</div>
+
+<div id="result_roller">
+
+    {% if flag == True %}
+
+
+
+        trafienie: {{ att }}, dmg: {{ dmg }}
+
+
+
+    {% endif %}
+
+    {% if flag == False %}
+
+
+
+        {{ att }}
+
+
+
+    {% endif %}
+
+</div>
+
+</body>
+
+</html>
