@@ -5,7 +5,7 @@ import sys
 
 
 def main():
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dnd_d20_rolling_dir.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dnd_d20_rolling.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

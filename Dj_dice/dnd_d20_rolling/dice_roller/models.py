@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 class roll(models.Model):
     d_amount = models.IntegerField()
@@ -7,6 +8,6 @@ class roll(models.Model):
     attack_bonus = models.IntegerField()
     dmg_bonus = models.IntegerField()
     advatage_bonus = models.NullBooleanField()
-    crit_bonus = models.BooleanField
+    critic_bonus = models.NullBooleanField()
     attack_result = models.IntegerField()
     dmg_result = models.IntegerField()

@@ -13,17 +13,17 @@ def attack_def(request):
 
     elif request.method == "POST":
 
-        att, dmg, amount, dice_type, pro, mod, advantage, crit = hit_dice_roll(request.POST["amount"],
+        att, dmg, amount, dice_type, pro, mod, advantage, critic = hit_dice_roll(request.POST["amount"],
 
-                                                                               request.POST["dice_type"],
+                                                                                 request.POST["dice_type"],
 
-                                                                               request.POST["pro"],
+                                                                                 request.POST["pro"],
 
-                                                                               request.POST["mod"],
+                                                                                 request.POST["mod"],
 
-                                                                               request.POST["advantage"],
+                                                                                 request.POST["advantage"],
 
-                                                                               request.POST["crit"])
+                                                                                 request.POST["critic"])
 
         flag = True
 
@@ -31,7 +31,7 @@ def attack_def(request):
             flag = False
 
         if flag == True:
-            data_base_update = roll.request.Create(d_amount=amount,
+            data_base_update = roll.objects.create(d_amount=amount,
 
                                                    d_type=dice_type,
 
@@ -41,7 +41,7 @@ def attack_def(request):
 
                                                    advatage_bonus=advantage,
 
-                                                   crit_bonus=crit,
+                                                   critic_bonus=critic,
 
                                                    attack_result=att,
 
@@ -88,32 +88,32 @@ def skill_dice_roller(mod, advantage):
     return value + mod
 
 
-def hit_dice_roll(amount, dice_type, pro, mod, advantage, crit):
+def hit_dice_roll(amount, dice_type, pro, mod, advantage, critic):
     """
 
     amount : iloma kosćmi rzuca osoba
 
     dice_type : jaki typ kości zostaje rzucony, Dostepne wersje to k2, k3, k4, k6, k8, k10, k12, k20, k100
 
-    pro : modyfikator do trafienia przekazywany do funcki skill_dice_roller(), gdy funkcja ta zwróci wartość równą 20 + pro następuje zmiana crit na True, gdy wartość to 1 + pro funkcja zwraca warosć 0 oraz wyswietla informację o porażce
+    pro : modyfikator do trafienia przekazywany do funcki skill_dice_roller(), gdy funkcja ta zwróci wartość równą 20 + pro następuje zmiana critic na True, gdy wartość to 1 + pro funkcja zwraca warosć 0 oraz wyswietla informację o porażce
 
     mod : modyfikator dodawany do obrazeń końcowych
 
     advantage : czy rzucający ma przewagę? True - tak, None - nie, False - posiada utrudnienie. Wartość zwracana jest do funkcji skill_dice_roller
 
-    crit : Jeżeli wartość = True podwajana jest ilosć koścmi jakimi się rzuca.
+    critic : Jeżeli wartość = True podwajana jest ilosć koścmi jakimi się rzuca.
 
     return : zwraca informację o wskażniku trafienia oraz wartości obrazeń. Dodatkowo wyświetla wprowadzone parametry oraz wynik programu.
 
     """
 
-    amount, dice_type, pro, mod, advantage, crit = check(amount, dice_type, pro, mod, advantage, crit)
+    amount, dice_type, pro, mod, advantage, critic = check(amount, dice_type, pro, mod, advantage, critic)
 
     if (type(amount) != int) | (type(dice_type) != int) | (type(pro) != int) | (type(mod) != int):
 
         print("Kości oraz parametry muszą być liczbami naturalnymi.")
 
-        return "Wprowadzona wartość jest nieprawidłowa, zmień ustawienia losowania", 0
+        return bad_value_error()
 
 
 
@@ -121,7 +121,7 @@ def hit_dice_roll(amount, dice_type, pro, mod, advantage, crit):
 
         print("Ilość kośći nie może być zerowa lub ujemna,")
 
-        return "Wprowadzona wartość jest nieprawidłowa, zmień ustawienia losowania", 0
+        return bad_value_error()
 
 
 
@@ -129,7 +129,7 @@ def hit_dice_roll(amount, dice_type, pro, mod, advantage, crit):
 
         print("Takiej kości nie ma")
 
-        return "Wprowadzona wartość jest nieprawidłowa, zmień ustawienia losowania", 0
+        return bad_value_error()
 
 
 
@@ -137,21 +137,21 @@ def hit_dice_roll(amount, dice_type, pro, mod, advantage, crit):
 
         print("Brak obsługi takiej wartości advantage")
 
-        return "Wprowadzona wartość jest nieprawidłowa, zmień ustawienia losowania", 0
+        return bad_value_error()
 
 
 
-    elif crit not in (True, False):
+    elif critic not in (True, False):
 
-        print("Brak obsługi takiej wartości crit")
+        print("Brak obsługi takiej wartości critic")
 
-        return "Wprowadzona wartość jest nieprawidłowa, zmień ustawienia losowania", 0
+        return bad_value_error()
 
     hit = skill_dice_roller(mod=pro, advantage=advantage)
 
     if (hit - pro) == 20:
 
-        crit = True
+        critic = True
 
 
 
@@ -163,11 +163,11 @@ def hit_dice_roll(amount, dice_type, pro, mod, advantage, crit):
 
     print(
         "Wprowadzono: Ilość kości:{}, typ kości: k{}, modyfikator do trafienia: {}, modyfikator do obrazeń:{}, advantage: {}, trafienie krytyczne: {}".format(
-            amount, dice_type, pro, mod, advantage, crit))
+            amount, dice_type, pro, mod, advantage, critic))
 
     sum_of_dmg = 0
 
-    if crit == True:
+    if critic == True:
         amount = amount * 2
 
     for i in range(1, amount + 1):
@@ -175,10 +175,10 @@ def hit_dice_roll(amount, dice_type, pro, mod, advantage, crit):
 
     print("Trafnienie: {}, dmg:{}".format(hit, sum_of_dmg))
 
-    return hit, sum_of_dmg, amount, dice_type, pro, mod, advantage, crit
+    return hit, sum_of_dmg, amount, dice_type, pro, mod, advantage, critic
 
 
-def check(amount, dice_type, pro, mod, advantage, crit):
+def check(amount, dice_type, pro, mod, advantage, critic):
     """
 
     Próba konwersji warotści input (string) na właściwe. Inaczej zwróc zmienną jako napis error.
@@ -203,15 +203,15 @@ def check(amount, dice_type, pro, mod, advantage, crit):
 
         advantage = "Error"
 
-    if crit in ("True", "False"):
+    if critic in ("True", "False"):
 
-        if crit == "True":
+        if critic == "True":
 
-            crit = True
+            critic = True
 
         else:
 
-            crit = False
+            critic = False
 
     try:
 
@@ -245,4 +245,8 @@ def check(amount, dice_type, pro, mod, advantage, crit):
 
         mod = "Error"
 
-    return amount, dice_type, pro, mod, advantage, crit
+    return amount, dice_type, pro, mod, advantage, critic
+
+
+def bad_value_error():
+    return "Wprowadzona wartość jest nieprawidłowa, zmień ustawienia losowania", 0, 0, 0, 0, 0, 0, 0
