@@ -29,6 +29,8 @@ def attack_def(request):
 
         if att == "Wprowadzona wartość jest nieprawidłowa, zmień ustawienia losowania":
             flag = False
+        elif  att == "Krytyczna porażka":
+            flag = "fatal terror"
 
         if flag == True:
             data_base_update = roll.objects.create(d_amount=amount,
@@ -47,7 +49,7 @@ def attack_def(request):
 
                                                    dmg_result=dmg)
 
-        return render(request, 'dice_roll_dir/attack.html', {"att": str(att), "dmg": str(dmg), "flag": flag})
+        return render(request, 'dice_roll_dir/attack.html', {"att": att, "dmg": str(dmg), "flag": flag})
 
 
 def skill_dice_roller(mod, advantage):
@@ -157,15 +159,14 @@ def hit_dice_roll(amount, dice_type, pro, mod, advantage, critic):
 
     elif (hit - pro) == 1:
 
-        print("TOTALNA PORAŻKA")
 
-        return "Krytyczna porażka", str(0)
+        return "Krytyczna porażka", 0, 0, 0, 0, 0, 0, 0
 
     print(
         "Wprowadzono: Ilość kości:{}, typ kości: k{}, modyfikator do trafienia: {}, modyfikator do obrazeń:{}, advantage: {}, trafienie krytyczne: {}".format(
             amount, dice_type, pro, mod, advantage, critic))
 
-    sum_of_dmg = 0
+    sum_of_dmg = mod
 
     if critic == True:
         amount = amount * 2

@@ -118,11 +118,11 @@
 
         </label>
 
-        <select name="crit">
+        <select name="critic">
 
-            <option value="False">Nie</option>
+            <option value=False>Nie</option>
 
-            <option value="True">Tak</option>
+            <option value=True>Tak</option>
 
         </select>
 
@@ -149,6 +149,15 @@
     {% endif %}
 
     {% if flag == False %}
+
+
+
+        {{ att }}
+
+
+
+    {% endif %}
+    {% if flag == "fatal terror" %}
 
 
 
