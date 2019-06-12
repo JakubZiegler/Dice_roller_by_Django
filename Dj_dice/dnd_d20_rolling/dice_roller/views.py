@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from .models import roll
 from random import randint
 
 
@@ -10,26 +10,44 @@ def attack_def(request):
 
         return render(request, 'dice_roll_dir/attack.html')
 
+
     elif request.method == "POST":
 
-        att, dmg = hit_dice_roll(request.POST["amount"],
+        att, dmg, amount, dice_type, pro, mod, advantage, crit = hit_dice_roll(request.POST["amount"],
 
-                                 request.POST["dice_type"],
+                                                                               request.POST["dice_type"],
 
-                                 request.POST["pro"],
+                                                                               request.POST["pro"],
 
-                                 request.POST["mod"],
+                                                                               request.POST["mod"],
 
-                                 request.POST["advantage"],
+                                                                               request.POST["advantage"],
 
-                                 request.POST["crit"])
+                                                                               request.POST["crit"])
 
         flag = True
 
         if att == "Wprowadzona wartość jest nieprawidłowa, zmień ustawienia losowania":
             flag = False
 
-        return render(request, 'dice_roll_dir/attack.html', {"att": att, "dmg": dmg, "flag": flag})
+        if flag == True:
+            data_base_update = roll.request.Create(d_amount=amount,
+
+                                                   d_type=dice_type,
+
+                                                   attack_bonus=pro,
+
+                                                   dmg_bonus=mod,
+
+                                                   advatage_bonus=advantage,
+
+                                                   crit_bonus=crit,
+
+                                                   attack_result=att,
+
+                                                   dmg_result=dmg)
+
+        return render(request, 'dice_roll_dir/attack.html', {"att": str(att), "dmg": str(dmg), "flag": flag})
 
 
 def skill_dice_roller(mod, advantage):
@@ -157,7 +175,7 @@ def hit_dice_roll(amount, dice_type, pro, mod, advantage, crit):
 
     print("Trafnienie: {}, dmg:{}".format(hit, sum_of_dmg))
 
-    return str(hit), str(sum_of_dmg)
+    return hit, sum_of_dmg, amount, dice_type, pro, mod, advantage, crit
 
 
 def check(amount, dice_type, pro, mod, advantage, crit):

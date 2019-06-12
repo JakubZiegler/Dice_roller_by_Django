@@ -1,4 +1,4 @@
-"""dnd_d20_rolling URL Configuration
+"""dnd_d20_rolling_dir URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/

@@ -1,5 +1,5 @@
 """
-WSGI config for dnd_d20_rolling project.
+WSGI config for dnd_d20_rolling_dir project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dnd_d20_rolling.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dnd_d20_rolling_dir.settings')
 
 application = get_wsgi_application()
